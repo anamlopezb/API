@@ -9,6 +9,9 @@ export const PracticeMode = practicasDB.define('modalidades_practicas', {
     },
     nombre:{
         type: DataTypes.STRING
+    },
+    descripcion:{
+        type: DataTypes.STRING
     }
 }, {
     timestamps: false

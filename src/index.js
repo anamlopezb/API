@@ -2,12 +2,18 @@
 import app from './app.js';
 import practicasDB from './database/database.js'; // Cambia esto
 import { Company } from './models/Company.js';
+import { Final_report } from './models/final-report-tec.js';
+import { First_delivery } from './models/first-delivery.js';
+import { Manager_practices } from './models/manager-practices.js';
+import { Meetings } from './models/meetings.js';
 import { Offer } from './models/Offer.js';
 import { Postulation } from './models/Postulation.js';
 import { Practice } from './models/Practice.js';
 import { PracticeLevel } from './models/PracticeLevel.js';
 import { PracticeMode } from './models/PracticeMode.js';
 import { PracticeStatus } from './models/PracticeStatus.js';
+import { Scheduling } from './models/scheduling.js';
+import { Third_installment } from './models/third-installment.js';
 import { User } from './models/User.js';
 import { UserPracticeLevel } from './models/UserPracticeLevel.js';
 import { UserPracticeMode } from './models/UserPracticeMode.js';
@@ -55,6 +61,35 @@ PracticeLevel.hasMany(UserPracticeLevel, { foreignKey: 'id_nivel_practica' });
 // Relaciones entre Usuarios Modalidades Práctica y Modalidades de Práctica
 UserPracticeMode.belongsTo(PracticeMode, { foreignKey: 'id_modalidad_practica' });
 PracticeMode.hasMany(UserPracticeMode, { foreignKey: 'id_modalidad_practica' });
+
+// Relaciones entre Usuarios y Agendamientos
+Scheduling.belongsTo(User, { foreignKey: 'id_usuario' });
+User.hasMany(Scheduling, { foreignKey: 'id_usuario' });
+
+// Relaciones entre Agendamientos y Encuentros
+Meetings.belongsTo(Scheduling, { foreignKey: 'id_agendamientos' });
+Scheduling.hasMany(Meetings, { foreignKey: 'id_agendamientos' });
+
+// Relaciones entre Gestion de practicas y usuarios
+Manager_practices.belongsTo(User, { foreignKey: 'id_usuario' });
+User.hasOne(Manager_practices, { foreignKey: 'id_usuario' });
+
+// Relaciones entre Gestion de practica y primera entrega
+First_delivery.belongsTo(Manager_practices, { foreignKey: 'id_gestion_practicas' });
+Manager_practices.hasOne(First_delivery, { foreignKey: 'id_gestion_practicas' });
+
+// Relaciones entre Gestion de practica y tercera entrega
+Third_installment.belongsTo(Manager_practices, { foreignKey: 'id_gestion_practicas' });
+Manager_practices.hasOne(Third_installment, { foreignKey: 'id_gestion_practicas' });
+
+// Relaciones entre Tercera entrega y formulario final
+Final_report.belongsTo(Third_installment, { foreignKey: 'id_gestion_practicas' });
+Third_installment.hasOne(Final_report, { foreignKey: 'id_gestion_practicas' });
+
+// Relaciones entre Niveles practica y formulario final
+Final_report.belongsTo(PracticeLevel, { foreignKey: 'id_nivel_practica' });
+PracticeLevel.hasOne(Final_report, { foreignKey: 'id_nivel_practica' });
+
 
 async function main() {
     try {

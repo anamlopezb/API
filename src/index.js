@@ -2,15 +2,20 @@
 import app from './app.js';
 import practicasDB from './database/database.js'; // Cambia esto
 import { Company } from './models/Company.js';
+import { MenuItem } from './models/MenuItem.js';
 import { Offer } from './models/Offer.js';
 import { Postulation } from './models/Postulation.js';
 import { Practice } from './models/Practice.js';
 import { PracticeLevel } from './models/PracticeLevel.js';
 import { PracticeMode } from './models/PracticeMode.js';
 import { PracticeStatus } from './models/PracticeStatus.js';
+import { Rol } from './models/Rol.js';
 import { User } from './models/User.js';
 import { UserPracticeLevel } from './models/UserPracticeLevel.js';
 import { UserPracticeMode } from './models/UserPracticeMode.js';
+import { RolMenuItem } from './models/RolMenuItem.js';
+import { ModalitiesForm } from './models/ModalitiesForm.js';
+import { TeacherStudent } from './models/TeacherStudent.js';
 
 // Relaciones entre Oferta y Empresa
 Offer.belongsTo(Company, { foreignKey: 'id_empresa' });
@@ -55,6 +60,47 @@ PracticeLevel.hasMany(UserPracticeLevel, { foreignKey: 'id_nivel_practica' });
 // Relaciones entre Usuarios Modalidades Práctica y Modalidades de Práctica
 UserPracticeMode.belongsTo(PracticeMode, { foreignKey: 'id_modalidad_practica' });
 PracticeMode.hasMany(UserPracticeMode, { foreignKey: 'id_modalidad_practica' });
+
+// Relaciones entre Usuario y Rol
+Rol.hasMany(User, { foreignKey: 'id_rol', as: 'usuarios' });
+User.belongsTo(Rol, { foreignKey: 'id_rol', as: 'roles' });
+
+// Relaciones entre Rol y MenuItem
+Rol.belongsToMany(MenuItem, { through: 'RolMenuItem', foreignKey: 'id_rol', as: 'menuItems' });
+MenuItem.belongsToMany(Rol, { through: 'RolMenuItem', foreignKey: 'id_menu_item', as: 'roles' });
+
+// Relaciones entre RolMenuItem y sus modelos relacionados
+Rol.hasMany(RolMenuItem, { foreignKey: 'id_rol', as: 'rolMenuItems' });
+RolMenuItem.belongsTo(Rol, { foreignKey: 'id_rol', as: 'rol' });
+
+// Relaciones entre MenuItem y RolMenuItem
+MenuItem.hasMany(RolMenuItem, { foreignKey: 'id_menu_item', as: 'rolMenuItems' });
+RolMenuItem.belongsTo(MenuItem, { foreignKey: 'id_menu_item', as: 'menuItem' });
+
+// Relaciones entre User y DocenteEstudiante
+User.hasMany(TeacherStudent, { foreignKey: 'id_docente', as: 'estudiantes' });
+TeacherStudent.belongsTo(User, { foreignKey: 'id_docente', as: 'docente' });
+
+// Relaciones entre User y DocenteEstudiante
+User.hasMany(TeacherStudent, { foreignKey: 'id_estudiante', as: 'docentes' });
+TeacherStudent.belongsTo(User, { foreignKey: 'id_estudiante', as: 'estudiante'});
+
+// Relaciones entre Usuario y FormularioModalidad
+User.hasMany(ModalitiesForm, { foreignKey: 'id_usuario', as: 'formulariosModalidad' });
+ModalitiesForm.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuario' });
+
+// Relaciones entre Modalidad y FormularioModalidad
+PracticeMode.hasMany(ModalitiesForm, { foreignKey: 'id_modalidad', as: 'formulariosModalidad' });
+ModalitiesForm.belongsTo(PracticeMode, { foreignKey: 'id_modalidad', as: 'modalidad' });
+
+// Relaciones entre FormularioModalidad y Practica
+ModalitiesForm.hasMany(Practice, { foreignKey: 'id_modalidad', as: 'practicas' });
+Practice.belongsTo(ModalitiesForm, { foreignKey: 'id_modalidad', as: 'formularioModalidad' });
+
+// Relaciones entre FormularioModalidad y Usuario (relación de completar formulario)
+User.hasMany(ModalitiesForm, { foreignKey: 'id_usuario', as: 'formulariosModalidadCompletados' });
+ModalitiesForm.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuarioCompleta' });
+
 
 async function main() {
     try {

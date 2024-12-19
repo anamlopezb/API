@@ -17,8 +17,16 @@ export const Final_report = practicasDB.define('formulario_final', {
     },
     nombre:{
         type: DataTypes.STRING
-    }
-    
+    },
+    lista_opciones:{
+        type: DataTypes.INTEGER
+    },
+    casilla:{
+        type: DataTypes.STRING
+    },
+    opcion_respuesta:{
+        type: DataTypes.STRING
+    },
 
 }, {
     timestamps: false

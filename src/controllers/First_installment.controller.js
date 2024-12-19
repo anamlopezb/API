@@ -1,4 +1,4 @@
-import First_installmentGetter from "../business/Practices/first-installmentGetter";
+import First_installmentGetter from "../business/Practices/first-installmentGetter.js";
 
 export const getFirst_installmentGetter = async (req, res) => {
     try {

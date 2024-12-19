@@ -1,4 +1,4 @@
-import Final_reportGetter from "../business/Practices/final-report-tecGetter";
+import Final_reportGetter from "../business/Practices/final-report-tecGetter.js";
 
 export const getFinal_reportGetter = async (req, res) => {
     try {

@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import practicasDB from '../database/database.js';
-import { Manager_practices } from "./manager_practices.js";
+import { Manager_practices } from "./manager-practices.js";
 
 export const Third_installment = practicasDB.define('tercera_entrega', {
     id:{
@@ -8,7 +8,7 @@ export const Third_installment = practicasDB.define('tercera_entrega', {
         primaryKey: true,
         autoIncrement: true
     },
-    id_gestion_practicas:{
+    id_gestion_practica:{
         type: DataTypes.INTEGER
     },
     nombre:{

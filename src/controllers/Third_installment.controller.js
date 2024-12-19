@@ -1,4 +1,4 @@
-import Third_installmentGetter from '../business/Third_installment/Third_installmentGetter.js';
+import Third_installmentGetter from '../business/Practices/Third-installmentGetter.js';
 
 export const getThirdInstallmentsGetter = async (req, res) => {
     try {
@@ -13,5 +13,6 @@ export const getThirdInstallmentsGetter = async (req, res) => {
             message: 'Error recuperando la tercera entrega',
             error: error.message,
         });
+
     }
 };

@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import practicasDB from '../database/database.js';
 import { User } from "./User.js";
 
-export const Manager_practices = practicasDB.define('gestion_practicas', {
+export const Manager_practices = practicasDB.define('gestion_practica', {
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true,

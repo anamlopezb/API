@@ -8,7 +8,7 @@ class First_installmentGetter {
             include:[
                 { 
                     model: Manager_practices, 
-                    as: "gestion_practicas", 
+                    as: "gestion_practica", 
                     include: [
                         { model: User, as: "usuarios", attributes: ['primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido' ] },
                     ],

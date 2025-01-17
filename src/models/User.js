@@ -19,6 +19,9 @@ export const User = practicasDB.define('usuarios', {
     segundo_apellido:{
         type: DataTypes.STRING
     },
+    id_rol:{
+        type: DataTypes.INTEGER
+    }
 }, {
     timestamps: false
 });

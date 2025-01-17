@@ -15,6 +15,7 @@ services:
       DB_USER: postgres
       DB_PASS: compensar1234
       DB_NAME: practicas
+      BASE_URL: http://localhost:3000
     depends_on:
       - db
 

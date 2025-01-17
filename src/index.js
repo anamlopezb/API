@@ -16,6 +16,14 @@ import { UserPracticeMode } from './models/UserPracticeMode.js';
 import { RolMenuItem } from './models/RolMenuItem.js';
 import { ModalitiesForm } from './models/ModalitiesForm.js';
 import { TeacherStudent } from './models/TeacherStudent.js';
+import { TermsAcceptance } from './models/TermsAcceptance.js';
+import { DocumentFormalization } from './models/DocumentFormalization.js';
+import { StudentDocuments } from './models/StudentDocuments.js';
+import { StatesLoad } from './models/StatesLoad.js';
+import { StatesRelease } from './models/StatesRelease.js';
+import { Release } from './models/Release.js';
+import { PracticeRelease } from './models/PracticeRelease.js';
+import { GeneralSchemeForm } from './models/GeneralSchemeForm.js';
 
 // Relaciones entre Oferta y Empresa
 Offer.belongsTo(Company, { foreignKey: 'id_empresa' });
@@ -29,13 +37,17 @@ User.hasMany(Postulation, { foreignKey: 'id_usuario' });
 Postulation.belongsTo(Offer, { foreignKey: 'id_oferta' });
 Offer.hasMany(Postulation, { foreignKey: 'id_oferta' });
 
-// Relaciones entre Postulación y Práctica
-Practice.belongsTo(Postulation, { foreignKey: 'id_postulacion', as: 'postulacion'});
-Postulation.hasOne(Practice, { foreignKey: 'id_postulacion' });
-
-// Relaciones entre Práctica y Estado de Práctica
-Practice.belongsTo(PracticeStatus, { foreignKey: 'id_estado_practica', as: 'estado_practica'});
+// Relación entre Practice y PracticeStatus
+Practice.belongsTo(PracticeStatus, { as: 'estado_practica', foreignKey: 'id_estado_practica' });
 PracticeStatus.hasMany(Practice, { foreignKey: 'id_estado_practica' });
+
+// Relaciones entre usuario y practica
+User.hasMany(Practice, { foreignKey: 'id_usuario' });
+Practice.belongsTo(User, { foreignKey: 'id_usuario' });
+
+//Relaciones entre Terminos y Practica
+TermsAcceptance.belongsTo(Practice, { foreignKey: 'id_practica' });
+Practice.hasMany(TermsAcceptance, { foreignKey: 'id_practica' });
 
 // Relaciones entre Oferta y Nivel de Práctica
 Offer.belongsTo(PracticeLevel, { foreignKey: 'id_nivel_practica', as: 'nivel_practica'});
@@ -85,10 +97,6 @@ TeacherStudent.belongsTo(User, { foreignKey: 'id_docente', as: 'docente' });
 User.hasMany(TeacherStudent, { foreignKey: 'id_estudiante', as: 'docentes' });
 TeacherStudent.belongsTo(User, { foreignKey: 'id_estudiante', as: 'estudiante'});
 
-// Relaciones entre Usuario y FormularioModalidad
-User.hasMany(ModalitiesForm, { foreignKey: 'id_usuario', as: 'formulariosModalidad' });
-ModalitiesForm.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuario' });
-
 // Relaciones entre Modalidad y FormularioModalidad
 PracticeMode.hasMany(ModalitiesForm, { foreignKey: 'id_modalidad', as: 'formulariosModalidad' });
 ModalitiesForm.belongsTo(PracticeMode, { foreignKey: 'id_modalidad', as: 'modalidad' });
@@ -97,9 +105,34 @@ ModalitiesForm.belongsTo(PracticeMode, { foreignKey: 'id_modalidad', as: 'modali
 ModalitiesForm.hasMany(Practice, { foreignKey: 'id_modalidad', as: 'practicas' });
 Practice.belongsTo(ModalitiesForm, { foreignKey: 'id_modalidad', as: 'formularioModalidad' });
 
-// Relaciones entre FormularioModalidad y Usuario (relación de completar formulario)
-User.hasMany(ModalitiesForm, { foreignKey: 'id_usuario', as: 'formulariosModalidadCompletados' });
-ModalitiesForm.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuarioCompleta' });
+// Relaciones entre Usuario y AceptarTerminos
+User.hasMany(TermsAcceptance, { foreignKey: 'id_usuario', as: 'aceptacionesDeTerminos' });
+TermsAcceptance.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuarioQueAcepta' });
+
+// Relación entre DocumentosFormalizacion y EstadoEntregas
+DocumentFormalization.belongsTo(StatesRelease, { foreignKey: 'id_estado_entregas', as: 'estados_entrega' });
+StatesRelease.hasMany(DocumentFormalization, { foreignKey: 'id_estado_entregas', as: 'documentos_estudiante' });
+
+// Relación entre DocumentosFormalizacion y EstadoCargues
+DocumentFormalization.belongsTo(StatesLoad, { foreignKey: 'id_estado_cargues', as: 'estados_cargue' });
+StatesLoad.hasMany(DocumentFormalization, { foreignKey: 'id_estado_cargues', as: 'documentos_estudiante' });
+
+
+// Relación entre DocumentosFormalizacion y DocumentosEstudiantes
+DocumentFormalization.belongsTo(StudentDocuments, { foreignKey: 'id_documentos_estudiante' });
+StudentDocuments.hasMany(DocumentFormalization, { foreignKey: 'id_documentos_estudiante' });7
+
+// Relación entre entregas y practicas
+Practice.hasMany(PracticeRelease, { foreignKey: 'id_practica' });
+PracticeRelease.belongsTo(Practice, { foreignKey: 'id_practica' });
+
+// Relación entre entregas y entregas_fase
+Release.hasMany(PracticeRelease, { foreignKey: 'id_entrega' });
+PracticeRelease.belongsTo(Release, { foreignKey: 'id_entrega' });
+
+// Relacion esquema general y usuario
+User.hasMany(GeneralSchemeForm, { foreignKey: 'id_usuario', as: 'formulariosEsquemaGeneral' });
+GeneralSchemeForm.belongsTo(User, { foreignKey: 'id_usuario', as: 'usuario' });
 
 
 async function main() {

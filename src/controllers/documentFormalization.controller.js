@@ -98,7 +98,7 @@ export const updateFormalizationDocumentRecord = async (req, res) => {
             estado_documento,                        // Actualiza el estado del documento
             fecha_cargue,                            // Actualiza la fecha de carga
             ruta_documento: `uploads/${req.file.filename}`,  // Guarda solo la ruta relativa
-            tamaño_documento: req.file.size,         // Actualiza el tamaño del archivo
+            tamano_documento: req.file.size,         // Actualiza el tamaño del archivo
             formato_documento: req.file.mimetype,    // Actualiza el tipo de archivo
             fecha_actualizacion: new Date(),         // Actualiza la fecha de actualización
             id_estado_cargues: 2,                   // Establece el estado de entrega como 2
@@ -279,7 +279,7 @@ export const deleteFormalizationDocumentRecord = async (req, res) => {
             estado_documento: null,        // Restablece el estado del documento
             fecha_cargue: null,            // Restablece la fecha de carga
             ruta_documento: null,          // Restablece la ruta del archivo
-            tamaño_documento: null,        // Restablece el tamaño del archivo
+            tamano_documento: null,        // Restablece el tamaño del archivo
             formato_documento: null,       // Restablece el formato del archivo
             fecha_actualizacion: new Date(), // Actualiza la fecha de modificación
             id_estado_entregas: 1,         // Restablece el estado de entrega inicial

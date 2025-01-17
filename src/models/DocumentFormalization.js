@@ -35,7 +35,7 @@ export const DocumentFormalization = practicasDB.define('documentos_formalizacio
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    tamaño_documento: {
+    tamano_documento: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },

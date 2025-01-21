@@ -148,11 +148,25 @@ export const updateTermsAcceptance = async (req, res) => {
         });
 
         res.status(200).json({ message: 'Aceptación de términos actualizada con éxito', data: updatedAcceptance });
+
     } catch (error) {
         console.error(error);
+
+        // En caso de error, dejar el campo id_practica como null
+        try {
+            await TermsAcceptance.update(
+                { id_practica: null }, // Establecer el campo id_practica como null
+                { where: { id_usuario } }
+            );
+            console.log('Campo id_practica revertido a null exitosamente.');
+        } catch (rollbackError) {
+            console.error('Error al revertir el campo id_practica a null:', rollbackError);
+        }
+
         res.status(500).json({ message: 'Error actualizando la aceptación de términos', error: error.message });
     }
 };
+
 
 
   

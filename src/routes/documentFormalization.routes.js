@@ -30,7 +30,7 @@ router.put(
 router.put('/document-formalization/:id', updateDocumentFormalization);
 router.delete('/document-formalization/:id', deleteDocumentFormalization);
 router.get('/documents-practice/:idPractice', getDocumentsByPractice);
-router.post('/fomalization-documents-record/:idPractice', createFormalizationDocumentRecord);
+router.post('/fomalization-documents-record/:idPractice/:modalidad', createFormalizationDocumentRecord);
 router.delete('/formalization/:id', deleteFormalizationDocumentRecord);
 
 // Ruta para ver el archivo de formalización de documento

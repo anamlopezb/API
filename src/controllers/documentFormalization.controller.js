@@ -71,7 +71,7 @@ export const updateFormalizationDocumentRecord = async (req, res) => {
         }
         
         // Verifica si el estado de cargue es 3 (aprobado)
-        if (documentRecord.id_estado_cargues === 3) {
+        if (documentRecord.id_estado_entregas === 3) {
             return res.status(400).json({ message: 'No se puede restablecer el registro, ya está aprobado.' });
         }
         // Si existe un archivo previamente cargado, intenta eliminarlo
@@ -167,7 +167,7 @@ export const getDocumentsByPractice = async (req, res) => {
                 {
                     model: StudentDocuments,
                     as: 'documentos_estudiante',
-                    attributes: ['id_documento', 'nombre_documento'],
+                    attributes: ['id_documento', 'nombre_documento',  'id_modalidades_practicas'],
                 },
                 {
                     model: StatesLoad,
@@ -198,33 +198,43 @@ export const getDocumentsByPractice = async (req, res) => {
 
 // Crear registros en la tabla documentos_formalizacion
 export const createFormalizationDocumentRecord = async (req, res) => {
-    const { idPractice } = req.params;  // This is coming from the URL parameter
+    const { idPractice, modalidad } = req.params; // Recibir modalidad como parámetro
 
-    if (!idPractice) {
-        return res.status(400).json({ message: 'El campo id_practica es obligatorio' });
+    // Validar que los parámetros requeridos estén presentes
+    if (!idPractice || !modalidad) {
+        return res.status(400).json({ message: 'Los campos id_practica y modalidad son obligatorios' });
     }
 
     try {
-        // Obtener todos los documentos de la tabla documentos_estudiante usando Sequelize
-        const documentosEstudiante = await StudentDocuments.findAll();
 
-
-        // Crear registros en la tabla documentos_formalizacion
-        const queries = documentosEstudiante.map(async (doc) => {
-            console.log(doc.id, doc.id_documento);
-            await DocumentFormalization.create({
-                id_practica: idPractice, // Use idPractice directly here
-                id_estado_entregas: 1, // Estado de entrega
-                id_estado_cargues: 1,   // Estado de cargue
-                id_documentos_estudiante: doc.id_documento,
-                documento: 'Sin Archivo',  // Ensure this is provided
-                fecha_cargue: null,  // Referencia al documento del estudiante
-            });
+        // Obtener todos los documentos de la tabla documentos_estudiante que coincidan con id_modalidades_practicas
+        const documentosEstudiante = await StudentDocuments.findAll({
+            where: { id_modalidades_practicas: modalidad }, // Filtrar por modalidad
+            attributes: ['id_documento'] // Seleccionar columnas relevantes
         });
 
-        // Espera que todas las inserciones se completen
-        await Promise.all(queries);
+        // Validar si no se encontraron documentos
+        if (documentosEstudiante.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron documentos para la modalidad especificada.' });
+        }
 
+        // Crear registros en la tabla documentos_formalizacion
+        const registrosFormalizacion = documentosEstudiante.map((doc) => {
+            return DocumentFormalization.create({
+                id_practica: idPractice, // ID de la práctica
+                id_estado_entregas: 1, // Estado inicial de entregas
+                id_estado_cargues: 1, // Estado inicial de cargues
+                id_documentos_estudiante: doc.id_documento, // Relación con documentos_estudiante
+                documento: 'Sin Archivo', // Valor inicial para el documento
+                fecha_cargue: null // Inicialmente sin fecha de cargue
+            });
+        });
+        
+
+        // Esperar que todas las operaciones asíncronas se completen
+        await Promise.all(registrosFormalizacion);
+
+        // Respuesta de éxito
         res.status(201).json({ message: 'Registros creados correctamente.' });
     } catch (error) {
         console.error('Error al crear registros:', error);
@@ -249,7 +259,7 @@ export const deleteFormalizationDocumentRecord = async (req, res) => {
         }
 
         // Verifica si el estado de cargue es 3 (aprobado)
-        if (documentRecord.id_estado_cargues === 3) {
+        if (documentRecord.id_estado_entregas === 3) {
             return res.status(400).json({ message: 'No se puede restablecer el registro, ya está aprobado.' });
         }
 

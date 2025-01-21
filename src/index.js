@@ -24,6 +24,8 @@ import { StatesRelease } from './models/StatesRelease.js';
 import { Release } from './models/Release.js';
 import { PracticeRelease } from './models/PracticeRelease.js';
 import { GeneralSchemeForm } from './models/GeneralSchemeForm.js';
+import { PracticeReleaseDocument } from './models/PracticeReleaseDocument.js';
+import { ReleaseDocument } from './models/ReleaseDocument.js';
 
 // Relaciones entre Oferta y Empresa
 Offer.belongsTo(Company, { foreignKey: 'id_empresa' });
@@ -117,18 +119,29 @@ StatesRelease.hasMany(DocumentFormalization, { foreignKey: 'id_estado_entregas',
 DocumentFormalization.belongsTo(StatesLoad, { foreignKey: 'id_estado_cargues', as: 'estados_cargue' });
 StatesLoad.hasMany(DocumentFormalization, { foreignKey: 'id_estado_cargues', as: 'documentos_estudiante' });
 
+// Relacion entre documentos entregas y practicas
+DocumentFormalization.belongsTo(Practice, { foreignKey: 'id_practica' });
+Practice.hasMany(DocumentFormalization, { foreignKey: 'id_practica' });
 
 // Relación entre DocumentosFormalizacion y DocumentosEstudiantes
 DocumentFormalization.belongsTo(StudentDocuments, { foreignKey: 'id_documentos_estudiante' });
 StudentDocuments.hasMany(DocumentFormalization, { foreignKey: 'id_documentos_estudiante' });7
 
-// Relación entre entregas y practicas
-Practice.hasMany(PracticeRelease, { foreignKey: 'id_practica' });
-PracticeRelease.belongsTo(Practice, { foreignKey: 'id_practica' });
+// Relación entre DocumentosFormalizacion y EstadoEntregas
+ReleaseDocument.belongsTo(StatesRelease, { foreignKey: 'id_estado_entregas', as: 'estadosEntregas' });
+StatesRelease.hasMany(ReleaseDocument, { foreignKey: 'id_estado_entregas', as: 'docEstudiante' });
 
-// Relación entre entregas y entregas_fase
-Release.hasMany(PracticeRelease, { foreignKey: 'id_entrega' });
-PracticeRelease.belongsTo(Release, { foreignKey: 'id_entrega' });
+// Relación entre DocumentosFormalizacion y EstadoCargues
+ReleaseDocument.belongsTo(StatesLoad, { foreignKey: 'id_estado_cargues', as: 'estadosCargue' });
+StatesLoad.hasMany(ReleaseDocument, { foreignKey: 'id_estado_cargues', as: 'docEstudiante' });
+
+// Relacion entre documentos entregas y practicas
+ReleaseDocument.belongsTo(Practice, { foreignKey: 'id_practica', as: 'practicas' }); 
+Practice.hasMany(ReleaseDocument, { foreignKey: 'id_practica', as: 'documentosEntregas' });
+
+ReleaseDocument.belongsTo(PracticeReleaseDocument, { foreignKey: 'id_documento_entrega', as: 'documentos_entrega_practica' });
+PracticeReleaseDocument.hasMany(ReleaseDocument, { foreignKey: 'id_documento_entrega', as: 'documentos_entrega_practica' });
+
 
 // Relacion esquema general y usuario
 User.hasMany(GeneralSchemeForm, { foreignKey: 'id_usuario', as: 'formulariosEsquemaGeneral' });

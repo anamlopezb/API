@@ -18,6 +18,8 @@ import documentFormalizationRoutes from './routes/documentFormalization.routes.j
 import releaseRoutes from './routes/release.routes.js';
 import releasePracticeRoutes from './routes/releasePractice.routes.js';
 import generalSchemeFormRoutes from './routes/generalSchemeForm.routes.js';
+import practiceReleaseDocumentRoutes from './routes/practiceReleaseDocument.routes.js';
+import releaseDocumentRoutes from './routes/documentRelease.routes.js';
 
 // Configuración de __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -51,5 +53,8 @@ app.use(documentFormalizationRoutes)
 app.use(releaseRoutes);
 app.use(releasePracticeRoutes);
 app.use(generalSchemeFormRoutes);
+app.use(practiceReleaseDocumentRoutes);
+app.use(releaseDocumentRoutes);
+
 
 export default app;

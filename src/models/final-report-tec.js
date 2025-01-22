@@ -183,13 +183,9 @@ export const Final_report = practicasDB.define(
         observation_eleven: {
             type: DataTypes.TEXT,
             allowNull: true,
-            validate: {
-                min: 1,
-                max: 5,
-            },
         },
         observation_twelve: {
-            type: DataTypes.ENUM('Muy satisfecho', 'Satisfecho', 'Medianamente satisfecho', 'Poco satisfecho', 'Insatisfecho'), // Cambia las opciones de acuerdo a tus necesidades
+            type: DataTypes.ENUM('Muy satisfecho', 'Satisfecho', 'Medianamente satisfecho', 'Poco satisfecho', 'Insatisfecho'),
             allowNull: true,
         },
 
@@ -348,7 +344,6 @@ export const Final_report = practicasDB.define(
         indicator_twentythree: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
-            
         },
         indicator_twentyfour: {
             type: DataTypes.TEXT,
@@ -370,7 +365,7 @@ export const Final_report = practicasDB.define(
                 max: 5,
             },
         },
-        indicator_twentysix: {
+        indicator_twentyseven: {
             type: DataTypes.INTEGER,
             allowNull: true,
             validate: {
@@ -436,11 +431,11 @@ export const Final_report = practicasDB.define(
         },
 
         student_one: {
-            type: DataTypes.ENUM('Propuesta', 'Desarrollo(pruebas)', 'Implementación'), // Cambia las opciones de acuerdo a tus necesidades
+            type: DataTypes.ENUM('Propuesta', 'Desarrollo(pruebas)', 'Implementación'),
             allowNull: true,
         },
         student_two: {
-            type: DataTypes.ENUM('Menos del 50%', '50%', '75%', '100'), // Cambia las opciones de acuerdo a tus necesidades
+            type: DataTypes.ENUM('Menos del 50%', '50%', '75%', '100'),
             allowNull: true,
         },
         student_three: {
@@ -448,14 +443,14 @@ export const Final_report = practicasDB.define(
             allowNull: true,
         },
         student_four: {
-            type: DataTypes.ENUM('Si', 'No', 'Otras'), // Cambia las opciones de acuerdo a tus necesidades
+            type: DataTypes.ENUM('Si', 'No', 'Otras'),
             allowNull: true,
         },
         student_five: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
-        
+
         fecha_creacion: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
